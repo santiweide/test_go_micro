@@ -1,0 +1,35 @@
+syntax = "proto3";
+package com.dut;
+option go_package = "/grpc/model";
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc TestStruct (StructRequest) returns (StructResponse) {}
+  // Sends another greeting
+  rpc TestString (StringRequest) returns (StringResponse) {}
+}
+
+// string request
+message StringRequest {
+  string message = 1;
+}
+
+// string response
+message StringResponse {
+  string message = 1;
+}
+
+// struct request
+message StructRequest {
+  int32 id = 1;
+  map<int32, string> kv_map = 2;
+  repeated  string string_list = 3;
+}
+
+// struct response
+message StructResponse {
+  int32 id = 1;
+  map<int32, string> kv_map = 2;
+  repeated  string string_list = 3;
+}

@@ -2,26 +2,27 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
-	"log"
-	"sync/atomic"
+	"test_go_micro/go_micro/model"
 	"time"
-
-	hello "github.com/micro/examples/greeter/srv/proto/hello"
-	"github.com/micro/go-micro"
 )
 
-var counter int64
+type Greeter struct{}
 
-type say struct{}
+func (g *Greeter) TestString(ctx context.Context, req *model.StringRequest, resp *model.StringResponse) error {
+	resp = &model.StringResponse{Message: req.Message}
+	return nil
+}
 
-func (s *say) Hello(ctx context.Context, req *hello.Request, rsp *hello.Response) error {
-	//log.Print("Received Say.Hello request")
-	rsp.Msg = "Hello " + req.Name
-
-	atomic.AddInt64(&counter, 1)
-
+func (g *Greeter) TestStruct(ctx context.Context, req *model.StructRequest, resp *model.StructResponse) error {
+	resp = &model.StructResponse{
+		Id:         req.Id,
+		KvMap:      req.KvMap,
+		StringList: req.StringList,
+	}
 	return nil
 }
 
@@ -32,34 +33,23 @@ func main() {
 				"127.0.0.1:8500",
 			}
 		})
+
+	// 创建新的服务
 	service := micro.NewService(
 		micro.Registry(reg),
-		micro.Name("go.micro.srv.greeter"),
-		micro.RegisterTTL(time.Second*300),
+		micro.Name("com.dut.srv.greeter"),
+		micro.RegisterTTL(time.Second*30000),
 		micro.RegisterInterval(time.Second*100),
 	)
 
-	// optionally setup command line usage
+	// 初始化，会解析命令行参数
 	service.Init()
 
-	// Register Handlers
-	hello.RegisterSayHandler(service.Server(), new(say))
+	// 注册处理器，调用 Greeter 服务接口处理请求
+	model.RegisterGreeterHandler(service.Server(), new(Greeter))
 
-	//go func() {
-	//	var t = time.Now().UnixNano() / 1e6
-	//	for {
-	//		select {
-	//		case <-time.After(time.Second * 5):
-	//			now := time.Now().UnixNano() / 1e6
-	//			v := atomic.SwapInt64(&counter, 0)
-	//			log.Print("count: ", float64(v)/float64((now-t)/1000), "/s")
-	//			t = now
-	//		}
-	//	}
-	//}()
-
-	// Run server
+	// 启动服务
 	if err := service.Run(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
