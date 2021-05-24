@@ -3,6 +3,7 @@ package test
 import (
 	"context"
 	"fmt"
+	_ "github.com/mbobakov/grpc-consul-resolver" // It's important
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
@@ -11,20 +12,17 @@ import (
 	"testing"
 )
 
-func BenchmarkTestString(b *testing.B){
-	for n:= 0;n < b.N;n ++{
+func BenchmarkTestString(b *testing.B) {
+	for n := 0; n < b.N; n++ {
 		testString()
 	}
 }
 
-
-func BenchmarkTestStruct(b *testing.B){
-	for n:= 0;n < b.N;n ++{
+func BenchmarkTestStruct(b *testing.B) {
+	for n := 0; n < b.N; n++ {
 		testStruct()
 	}
 }
-
-
 
 func testString() {
 
@@ -70,9 +68,9 @@ func testStruct() {
 	greeter := model.NewGreeterService("Greeter", service.Client())
 
 	_map := make(map[int32]string)
-	_list := make([]string,100)
-	for i := 0;i < 100;i ++ {
-		_map[int32(i)]=test_go_micro.RandStringRunes(100)
+	_list := make([]string, 100)
+	for i := 0; i < 100; i++ {
+		_map[int32(i)] = test_go_micro.RandStringRunes(100)
 		_list[i] = test_go_micro.RandStringRunes(100)
 	}
 	req := &model.StructRequest{

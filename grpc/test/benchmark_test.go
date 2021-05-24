@@ -2,6 +2,7 @@ package test
 
 import (
 	"context"
+	_ "github.com/mbobakov/grpc-consul-resolver" // It's important
 	"google.golang.org/grpc"
 	"log"
 	"test_go_micro"
@@ -10,7 +11,7 @@ import (
 )
 
 const (
-	target = "139.198.174.188:8500/test_grpc"
+	target = "consul://139.198.174.188:8500/test_grpc"
 )
 
 func BenchmarkTestString(b *testing.B) {
