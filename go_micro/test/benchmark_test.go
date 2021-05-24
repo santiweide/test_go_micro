@@ -40,7 +40,7 @@ func testString() {
 	service.Init()
 	greeter := model.NewGreeterService("Greeter", service.Client())
 	req := &model.StringRequest{
-		Message: test_go_micro.RandStringRunes(test_go_micro.StrLen),
+		Message: test_go_micro.RandStringRunes(test_go_micro.Str10k),
 	}
 
 	// Use the generated client stub

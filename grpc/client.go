@@ -18,8 +18,11 @@ const (
 
 func main(){
 	r := gin.Default()
-	r.GET("/string", func(c *gin.Context) {
-		testString()
+	r.GET("/string10", func(c *gin.Context) {
+		testString10K()
+	})
+	r.GET("/string1", func(c *gin.Context) {
+		testString1K()
 	})
 	r.GET("/struct", func(c *gin.Context) {
 		testStruct()
@@ -28,7 +31,7 @@ func main(){
 }
 
 
-func testString() {
+func testString10K() {
 	conn, err := grpc.Dial(
 		target,
 		//		"consul://127.0.0.1:8500/test_grpc",
@@ -43,7 +46,33 @@ func testString() {
 	c := model.NewGreeterClient(conn)
 
 	req := &model.StringRequest{
-		Message: test_go_micro.RandStringRunes(test_go_micro.StrLen),
+		Message: test_go_micro.RandStringRunes(test_go_micro.Str10k),
+	}
+
+	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
+	ctx, _ := context.WithTimeout(context.Background(), time.Second)
+	_, err = c.TestString(ctx, req)
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+}
+
+func testString1K() {
+	conn, err := grpc.Dial(
+		target,
+		//		"consul://127.0.0.1:8500/test_grpc",
+		grpc.WithInsecure(),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	c := model.NewGreeterClient(conn)
+
+	req := &model.StringRequest{
+		Message: test_go_micro.RandStringRunes(test_go_micro.Str1k),
 	}
 
 	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))

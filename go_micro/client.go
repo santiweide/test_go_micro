@@ -15,8 +15,11 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.GET("/string", func(c *gin.Context) {
-		testString()
+	r.GET("/string10", func(c *gin.Context) {
+		testString10K()
+	})
+	r.GET("/string1", func(c *gin.Context) {
+		testString1K()
 	})
 	r.GET("/struct", func(c *gin.Context) {
 		testStruct()
@@ -24,7 +27,7 @@ func main() {
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
 
-func testString() {
+func testString10K() {
 
 	reg := consul.NewRegistry(
 		func(options *registry.Options) {
@@ -40,7 +43,35 @@ func testString() {
 	service.Init()
 	greeter := model.NewGreeterService("Greeter", service.Client())
 	req := &model.StringRequest{
-		Message: test_go_micro.RandStringRunes(test_go_micro.StrLen),
+		Message: test_go_micro.RandStringRunes(test_go_micro.Str10k),
+	}
+
+	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
+	// Use the generated client stub
+	_, err := greeter.TestString(context.Background(), req)
+
+	if err == nil {
+		fmt.Printf("error:%v\n", err)
+	}
+}
+
+func testString1K() {
+
+	reg := consul.NewRegistry(
+		func(options *registry.Options) {
+			options.Addrs = []string{
+				"127.0.0.1:8500",
+			}
+		})
+
+	// create a new service
+	service := micro.NewService(micro.Registry(reg))
+
+	// parse command line flags
+	service.Init()
+	greeter := model.NewGreeterService("Greeter", service.Client())
+	req := &model.StringRequest{
+		Message: test_go_micro.RandStringRunes(test_go_micro.Str1k),
 	}
 
 	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))

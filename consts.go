@@ -1,5 +1,6 @@
 package test_go_micro
 
-const StrLen int = 1000
+const Str10k int = 10000
+const Str1k int = 1000
 
 
