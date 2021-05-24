@@ -12,9 +12,16 @@ import (
 	"testing"
 )
 
-func BenchmarkTestString(b *testing.B) {
+
+func BenchmarkTestString1K(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		testString()
+		testString1K()
+	}
+}
+
+func BenchmarkTestString10K(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		testString10K()
 	}
 }
 
@@ -24,7 +31,7 @@ func BenchmarkTestStruct(b *testing.B) {
 	}
 }
 
-func testString() {
+func testString10K() {
 
 	reg := consul.NewRegistry(
 		func(options *registry.Options) {
@@ -41,6 +48,33 @@ func testString() {
 	greeter := model.NewGreeterService("Greeter", service.Client())
 	req := &model.StringRequest{
 		Message: test_go_micro.RandStringRunes(test_go_micro.Str10k),
+	}
+
+	// Use the generated client stub
+	_, err := greeter.TestString(context.Background(), req)
+
+	if err == nil {
+		fmt.Printf("error:%v\n", err)
+	}
+}
+
+func testString1K() {
+
+	reg := consul.NewRegistry(
+		func(options *registry.Options) {
+			options.Addrs = []string{
+				"139.198.174.188:8500",
+			}
+		})
+
+	// create a new service
+	service := micro.NewService(micro.Registry(reg))
+
+	// parse command line flags
+	service.Init()
+	greeter := model.NewGreeterService("Greeter", service.Client())
+	req := &model.StringRequest{
+		Message: test_go_micro.RandStringRunes(test_go_micro.Str1k),
 	}
 
 	// Use the generated client stub

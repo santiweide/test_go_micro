@@ -14,9 +14,15 @@ const (
 	target = "consul://139.198.174.188:8500/test_grpc"
 )
 
-func BenchmarkTestString(b *testing.B) {
+func BenchmarkTestString1K(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		testString()
+		testString1K()
+	}
+}
+
+func BenchmarkTestString10K(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		testString10K()
 	}
 }
 
@@ -26,7 +32,31 @@ func BenchmarkTestStruct(b *testing.B) {
 	}
 }
 
-func testString() {
+func testString1K() {
+	conn, err := grpc.Dial(
+		target,
+		//		"consul://127.0.0.1:8500/test_grpc",
+		grpc.WithInsecure(),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	c := model.NewGreeterClient(conn)
+
+	req := &model.StringRequest{
+		Message: test_go_micro.RandStringRunes(test_go_micro.Str1k),
+	}
+
+	_, err = c.TestString(context.Background(), req)
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+}
+
+func testString10K() {
 	conn, err := grpc.Dial(
 		target,
 		//		"consul://127.0.0.1:8500/test_grpc",
