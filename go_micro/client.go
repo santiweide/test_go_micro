@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
@@ -14,14 +13,15 @@ import (
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/string", func(c *gin.Context) {
-		testString()
-	})
-	r.GET("/struct", func(c *gin.Context) {
-		testStruct()
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	testString()
+	//r := gin.Default()
+	//r.GET("/string", func(c *gin.Context) {
+	//	testString()
+	//})
+	//r.GET("/struct", func(c *gin.Context) {
+	//	testStruct()
+	//})
+	//r.Run() // listen and serve on 0.0.0.0:8080
 }
 
 func testString() {
@@ -29,7 +29,7 @@ func testString() {
 	reg := consul.NewRegistry(
 		func(options *registry.Options) {
 			options.Addrs = []string{
-				"127.0.0.1:8500",
+				"139.198.174.188:8500",
 			}
 		})
 
@@ -57,7 +57,7 @@ func testStruct() {
 	reg := consul.NewRegistry(
 		func(options *registry.Options) {
 			options.Addrs = []string{
-				"127.0.0.1:8500",
+				"139.198.174.188:8500",
 			}
 		})
 

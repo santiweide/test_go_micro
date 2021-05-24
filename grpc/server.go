@@ -36,10 +36,10 @@ func (g *Greeter) TestString(ctx context.Context, req *model.StringRequest) (*mo
 }
 
 func RegisterToConsul() {
-	consul.RegitserService("127.0.0.1:8500", &consul.ConsulService{
+	consul.RegitserService("139.198.174.188:8500", &consul.ConsulService{
 		Name: "test_grpc",
 		Tag:  []string{"test_grpc"},
-		IP:   "127.0.0.1",
+		IP:   "192.168.0.2",
 		Port: 50051,
 	})
 }

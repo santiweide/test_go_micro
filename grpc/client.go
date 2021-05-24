@@ -2,29 +2,28 @@ package main
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
 	_ "github.com/mbobakov/grpc-consul-resolver"
 	"google.golang.org/grpc"
 	"log"
 	"test_go_micro"
 	"test_go_micro/grpc/model"
-	"time"
 	"unsafe"
 )
 
 const (
-	target = "consul://127.0.0.1:8500/test_grpc"
+	target = "consul://139.198.174.188:8500/test_grpc"
 )
 
 func main(){
-	r := gin.Default()
-	r.GET("/string", func(c *gin.Context) {
-		testString()
-	})
-	r.GET("/struct", func(c *gin.Context) {
-		testStruct()
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	testString()
+	//r := gin.Default()
+	//r.GET("/string", func(c *gin.Context) {
+	//	testString()
+	//})
+	//r.GET("/struct", func(c *gin.Context) {
+	//	testStruct()
+	//})
+	//r.Run() // listen and serve on 0.0.0.0:8080
 }
 
 
@@ -47,8 +46,7 @@ func testString() {
 	}
 
 	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
-	ctx, _ := context.WithTimeout(context.Background(), time.Second)
-	_, err = c.TestString(ctx, req)
+	_, err = c.TestString(context.Background(), req)
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
@@ -81,8 +79,7 @@ func testStruct() {
 	}
 	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
 
-	ctx, _ := context.WithTimeout(context.Background(), time.Second)
-	_, err = c.TestStruct(ctx, req)
+	_, err = c.TestStruct(context.Background(), req)
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
