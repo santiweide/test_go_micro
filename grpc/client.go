@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/gin-gonic/gin"
 	_ "github.com/mbobakov/grpc-consul-resolver"
 	"google.golang.org/grpc"
 	"log"
@@ -15,15 +16,14 @@ const (
 )
 
 func main(){
-	testString()
-	//r := gin.Default()
-	//r.GET("/string", func(c *gin.Context) {
-	//	testString()
-	//})
-	//r.GET("/struct", func(c *gin.Context) {
-	//	testStruct()
-	//})
-	//r.Run() // listen and serve on 0.0.0.0:8080
+	r := gin.Default()
+	r.GET("/string", func(c *gin.Context) {
+		testString()
+	})
+	r.GET("/struct", func(c *gin.Context) {
+		testStruct()
+	})
+	r.Run() // listen and serve on 0.0.0.0:8080
 }
 
 
