@@ -26,6 +26,7 @@ func (g *Greeter) TestStruct(ctx context.Context, req *model.StructRequest, resp
 	return nil
 }
 
+
 func main() {
 	reg := consul.NewRegistry(
 		func(options *registry.Options){
