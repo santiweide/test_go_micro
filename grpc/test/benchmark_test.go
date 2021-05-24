@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"context"
@@ -7,11 +7,10 @@ import (
 	"test_go_micro"
 	"test_go_micro/grpc/model"
 	"testing"
-	"unsafe"
 )
 
 const (
-	target = "consul://139.198.174.188:8500/test_grpc"
+	target = "139.198.174.188:8500/test_grpc"
 )
 
 func BenchmarkTestString(b *testing.B) {
@@ -44,7 +43,6 @@ func testString() {
 		Message: test_go_micro.RandStringRunes(10000),
 	}
 
-	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
 	_, err = c.TestString(context.Background(), req)
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
@@ -76,7 +74,6 @@ func testStruct() {
 		KvMap:      _map,
 		StringList: _list,
 	}
-	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
 
 	_, err = c.TestStruct(context.Background(), req)
 	if err != nil {

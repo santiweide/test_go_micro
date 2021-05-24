@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"context"
@@ -6,11 +6,9 @@ import (
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
-	"log"
 	"test_go_micro"
 	"test_go_micro/go_micro/model"
 	"testing"
-	"unsafe"
 )
 
 func BenchmarkTestString(b *testing.B){
@@ -47,7 +45,6 @@ func testString() {
 		Message: test_go_micro.RandStringRunes(10000),
 	}
 
-	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
 	// Use the generated client stub
 	_, err := greeter.TestString(context.Background(), req)
 
@@ -83,7 +80,7 @@ func testStruct() {
 		KvMap:      _map,
 		StringList: _list,
 	}
-	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
+
 	// Use the generated client stub
 	_, err := greeter.TestStruct(context.Background(), req)
 	if err == nil {
