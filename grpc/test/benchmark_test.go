@@ -41,7 +41,7 @@ func testString() {
 	c := model.NewGreeterClient(conn)
 
 	req := &model.StringRequest{
-		Message: test_go_micro.RandStringRunes(10000),
+		Message: test_go_micro.RandStringRunes(test_go_micro.StrLen),
 	}
 
 	_, err = c.TestString(context.Background(), req)
