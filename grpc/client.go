@@ -2,42 +2,40 @@ package main
 
 import (
 	"context"
-	"github.com/micro/go-micro/registry/consul"
+	_ "github.com/mbobakov/grpc-consul-resolver"
 	"google.golang.org/grpc"
 	"log"
-	"os"
+	"test_go_micro"
 	"test_go_micro/grpc/model"
 	"time"
 )
 
 const (
-	target      = "consul://127.0.0.1:8500/helloworld"
-	defaultName = "world"
+	target = "consul://127.0.0.1:8500/test_grpc"
 )
 
 func main() {
-	consul.Init()
-	// Set up a connection to the server.
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-	conn, err := grpc.DialContext(ctx, target, grpc.WithBlock(), grpc.WithInsecure(), grpc.WithBalancerName("round_robin"))
+	conn, err := grpc.Dial(
+		target,
+		//		"consul://127.0.0.1:8500/test_grpc",
+		grpc.WithInsecure(),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+	)
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Fatal(err)
 	}
 	defer conn.Close()
+
 	c := model.NewGreeterClient(conn)
 
 	// Contact the server and print out its response.
-	name := defaultName
-	if len(os.Args) > 1 {
-		name = os.Args[1]
+	//for {
+	ctx, _ := context.WithTimeout(context.Background(), time.Second)
+	_, err = c.TestString(ctx, &model.StringRequest{Message: test_go_micro.RandStringRunes(100)})
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
 	}
-	for {
-		ctx, _ := context.WithTimeout(context.Background(), time.Second)
-		r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
-		if err != nil {
-			log.Fatalf("could not greet: %v", err)
-		}
-		log.Printf("Greeting: %s", r.Message)
-		time.Sleep(time.Second * 2)
-	}
+	//log.Printf("Greeting: %s", r.Message)
+	//time.Sleep(time.Second * 2)
+	//}
 }
