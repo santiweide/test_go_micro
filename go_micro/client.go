@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
+//	"github.com/gin-gonic/gin"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
@@ -14,17 +14,17 @@ import (
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/string10", func(c *gin.Context) {
-		testString10K()
-	})
-	r.GET("/string1", func(c *gin.Context) {
-		testString1K()
-	})
-	r.GET("/struct", func(c *gin.Context) {
-		testStruct()
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	//r := gin.Default()
+	//r.GET("/string10", func(c *gin.Context) {
+	//	testString10K()
+	//})
+	//r.GET("/string1", func(c *gin.Context) {
+	testString1K()
+	//})
+	//r.GET("/struct", func(c *gin.Context) {
+	//	testStruct()
+	//})
+	//r.Run() // listen and serve on 0.0.0.0:8080
 }
 
 func testString10K() {
@@ -76,10 +76,12 @@ func testString1K() {
 
 	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
 	// Use the generated client stub
-	_, err := greeter.TestString(context.Background(), req)
+	resp, err := greeter.TestString(context.Background(), req)
 
 	if err == nil {
 		fmt.Printf("error:%v\n", err)
+	} else {
+		fmt.Printf("resp: %v\n", resp)
 	}
 }
 
