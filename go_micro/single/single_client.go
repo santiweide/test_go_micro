@@ -14,6 +14,7 @@ import (
 
 func main() {
 	testString1K()
+	testStruct()
 }
 
 
@@ -80,6 +81,6 @@ func testStruct() {
 	if err == nil {
 		fmt.Printf("error:%v\n", err)
 	} else {
-		fmt.Println("resp: %v\n", resp)
+		fmt.Printf("resp: %v \n\n", resp)
 	}
 }
