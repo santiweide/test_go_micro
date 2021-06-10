@@ -31,7 +31,7 @@ func main() {
 	reg := consul.NewRegistry(
 		func(options *registry.Options){
 			options.Addrs = []string{
-				"139.198.174.188:8500",
+				"192.168.0.3:8500",
 			}
 		})
 
