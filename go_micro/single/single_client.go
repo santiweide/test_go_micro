@@ -2,14 +2,12 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"log"
 	"test_go_micro"
 	"test_go_micro/go_micro/model"
-	"unsafe"
 )
 
 func main() {
@@ -37,14 +35,13 @@ func testString1K() {
 		Message: test_go_micro.RandStringRunes(test_go_micro.Str1k),
 	}
 
-	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
 	// Use the generated client stub
 	resp, err := greeter.TestString(context.Background(), req)
 
 	if err == nil {
-		fmt.Printf("error:%v\n", err)
+		log.Printf("error:%v\n", err)
 	} else {
-		fmt.Printf("resp: %v\n", resp)
+		log.Printf("resp: %v\n", resp)
 	}
 }
 
@@ -75,12 +72,12 @@ func testStruct() {
 		KvMap:      _map,
 		StringList: _list,
 	}
-	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
+
 	// Use the generated client stub
 	resp, err := greeter.TestStruct(context.Background(), req)
 	if err == nil {
-		fmt.Printf("error:%v\n", err)
+		log.Printf("error:%v\n", err)
 	} else {
-		fmt.Printf("resp: %v \n\n", resp)
+		log.Printf("resp: %v \n\n", resp)
 	}
 }
