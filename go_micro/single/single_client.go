@@ -76,8 +76,10 @@ func testStruct() {
 	}
 	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
 	// Use the generated client stub
-	_, err := greeter.TestStruct(context.Background(), req)
+	resp, err := greeter.TestStruct(context.Background(), req)
 	if err == nil {
 		fmt.Printf("error:%v\n", err)
+	} else {
+		fmt.Println("resp: %v\n", resp)
 	}
 }
