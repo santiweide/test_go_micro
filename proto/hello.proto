@@ -1,0 +1,15 @@
+syntax = "proto3";
+package com.dut;
+option go_package = "/go_micro/model";
+
+service HelloServer {
+  rpc Hello(HelloRequest) returns (HelloResponse) {}
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string greeting = 2;
+}

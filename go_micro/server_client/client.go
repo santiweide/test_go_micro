@@ -32,7 +32,7 @@ func testString10K() {
 	reg := consul.NewRegistry(
 		func(options *registry.Options) {
 			options.Addrs = []string{
-				"192.168.0.3:8500",
+				"127.0.0.1:8500",
 			}
 		})
 
@@ -46,7 +46,6 @@ func testString10K() {
 		Message: test_go_micro.RandStringRunes(test_go_micro.Str10k),
 	}
 
-	log.Printf("Request Size: %v\n", unsafe.Sizeof(req))
 	// Use the generated client stub
 	_, err := greeter.TestString(context.Background(), req)
 
@@ -60,7 +59,7 @@ func testString1K() {
 	reg := consul.NewRegistry(
 		func(options *registry.Options) {
 			options.Addrs = []string{
-				"192.168.0.3:8500",
+				"127.0.0.1:8500",
 			}
 		})
 
@@ -88,7 +87,7 @@ func testStruct() {
 	reg := consul.NewRegistry(
 		func(options *registry.Options) {
 			options.Addrs = []string{
-				"192.168.0.3:8500",
+				"127.0.0.1:8500",
 			}
 		})
 
